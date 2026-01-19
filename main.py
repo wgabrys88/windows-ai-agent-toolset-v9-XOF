@@ -15,8 +15,9 @@ from typing import Any, Dict, List, Tuple, Optional
 # CONFIGURATION
 # ============================================================================
 
+#in this case the max runtime tokens size was 1700 so I can set up 2k in LM Studio with larger model or max 3k and should be fine and will fit on my gtx1060 hehe
 LMSTUDIO_ENDPOINT = "http://localhost:1234/v1/chat/completions"
-LMSTUDIO_MODEL = "qwen3-vl-2b-instruct"
+LMSTUDIO_MODEL = "qwen3-vl-4b-instruct"
 LMSTUDIO_TIMEOUT = 240
 LMSTUDIO_TEMPERATURE = 0.5
 
@@ -28,9 +29,10 @@ AGENT_IMAGE_H = 256
 DUMP_DIR = "dumps"
 DUMP_PREFIX = "screen_"
 
-MAX_STEPS = 600
+MAX_STEPS = 30
 
 # TIMING CONSTANTS
+STARTUP_DELAY = 5.0
 TIMING_CURSOR_SETTLE = 0.12
 TIMING_UI_RENDER = 2.5
 TIMING_INPUT_CHAR = 0.005
@@ -1116,6 +1118,8 @@ def main() -> None:
     task = input("Mission: ").strip()
     if not task:
         sys.exit("Error: Mission required")
+
+    time.sleep(STARTUP_DELAY) #good to have to prevent the model to see his own logs, close cmd after enter do it
     
     # Capture initial screenshot
     png, sw, sh = capture_png(AGENT_IMAGE_W, AGENT_IMAGE_H)
@@ -1187,3 +1191,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
